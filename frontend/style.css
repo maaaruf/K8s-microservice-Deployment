@@ -1,0 +1,30 @@
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+header {
+    background-color: #3498db;
+    color: #fff;
+    padding: 10px;
+}
+
+section {
+    margin: 20px;
+}
+
+button {
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#product-list {
+    margin-top: 20px;
+}
+
+/* Add any additional styling as needed */
+
+  

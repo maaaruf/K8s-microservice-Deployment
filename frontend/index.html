@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Product List</h1>
+    </header>
+
+    <section>
+        <button id="get-products">Get Products</button>
+        <div id="product-list"></div>
+
+        <input type="number" id="pay-amount" placeholder="pay">
+        <button id="pay-btn">Pay</button>
+    </section>
+
+    <script>
+        const getProductsButton = document.getElementById("get-products");
+        const productList = document.getElementById("product-list");
+        const payButton = document.getElementById("pay-btn");
+        const payAmount = document.getElementById("pay-amount");
+
+        getProductsButton.addEventListener("click", async () => {
+            try {
+                const response = await fetch("http://localhost:9090/payment");
+                const products = await response.json();
+
+                productList.innerHTML = ""; // Clear previous content
+
+                products.forEach(product => {
+                    const productItem = document.createElement("p");
+                    productItem.textContent = product.name; // Assuming each product has a 'name' property
+                    productList.appendChild(productItem);
+                });
+            } catch (error) {
+                console.error("Error fetching products:", error);
+                // Handle errors gracefully, e.g., display an error message to the user
+            }
+        });
+
+        payButton.addEventListener("click", async () => {
+            try {
+                let amount = payAmount.value;
+
+                //make a post request to the server endpoint to http://localhost:9090/payment with json body amount
+                // add headers for cors and content-type
+
+                const response = await fetch("http://localhost:9090/payment", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Access-Control-Allow-Origin": "*"
+                    },
+                    body: JSON.stringify({ amount })
+                });
+                
+            } catch (error) {
+                console.error("Error fetching products:", error);
+                // Handle errors gracefully, e.g., display an error message to the user
+            }
+        });
+    </script>
+</body>
+</html>
