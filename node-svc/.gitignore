@@ -1,0 +1,32 @@
+# Node.js
+node_modules/
+
+
+
+# Dependency directories
+/lib-cov/
+*.seed
+*.log
+*.csv
+*.dat
+*.out
+*.pid
+*.gz
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Editor directories and files
+.vscode/
+.idea/
+
+# Logs
+logs/
+*.log
+
+# Output files
+dist/
+build/
+
+# n

@@ -1,0 +1,50 @@
+# docker-compose.yml
+version: "3"
+services:
+  app-node:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    #image: node-service
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongo
+    env_file:
+      - .env
+  mongo:
+    image: "mongo:latest"
+    ports:
+      - "27017:27017"
+
+  golang_app:
+    image: my-golang-service
+    ports:
+      - 9090:9090
+    depends_on:
+      - app-node
+      - app-dotnet
+
+  app-dotnet:
+    image: maaaruf/paymentsvc
+    environment:
+      - ConnectionStrings__DefaultConnection=Server=mssql,1433;Database=payment;User Id=sa;Password=Ohert45#;TrustServerCertificate=True;
+    depends_on: 
+      - mssql
+    ports:
+      - "5001:8080"
+
+  mssql:
+    image: mcr.microsoft.com/mssql/server
+    environment:
+      SA_PASSWORD: Ohert45#
+      ACCEPT_EULA: Y
+    ports:
+      - "1455:1433"
+  frontend-app:
+    image: frontend
+    depends_on:
+      - golang_app
+    ports:
+      - "3001:3000"
+
