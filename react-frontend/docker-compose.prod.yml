@@ -1,0 +1,9 @@
+version: "3.8"
+
+services:
+  app:
+    container_name: react-k8s-srv-prod
+    image: react-k8s-srv-prod
+    build:
+      context: .
+      target: production
