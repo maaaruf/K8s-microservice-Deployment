@@ -22,7 +22,7 @@ const response = await axios.post('https://api.example.com/post-endpoint', postD
         });
     */
 
-    axios.post('http://localhost:5001/api/pay', { amount }, {
+    axios.post('http://localhost:9090/payment', { amount }, {
       headers: {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*', // Allow requests from any origin

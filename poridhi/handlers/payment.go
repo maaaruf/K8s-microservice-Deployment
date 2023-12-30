@@ -26,14 +26,18 @@ func (p *Payment) LoadPayments(rw http.ResponseWriter, r *http.Request) {
     // Fetch the data from fruit-api
     resp, err := http.Get("http://app-dotnet:8080/api/LoadPayments")
     if err != nil {
-        log.Fatal(err)
+        p.l.Println("Error fetching data from payment-api:", err)
+		http.Error(rw, "Error fetching data from payment-api", http.StatusInternalServerError)
+		return
     }
     defer resp.Body.Close() // Close the response body
 
     // Read the response body
     body, err := io.ReadAll(resp.Body)
     if err != nil {
-        log.Fatalln(err)
+        p.l.Println("Error reading response body:", err)
+		http.Error(rw, "Error reading response body", http.StatusInternalServerError)
+		return
     }
 
     // Write the body to the client
@@ -42,7 +46,6 @@ func (p *Payment) LoadPayments(rw http.ResponseWriter, r *http.Request) {
 }
 
 func (p *Payment) Pay(w http.ResponseWriter, r *http.Request) {
-
     p.l.Println("Handle POST Request")
 
     var newPayment PaymentData
@@ -52,9 +55,10 @@ func (p *Payment) Pay(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    // Send the product to the other service as a POST request
+    // Send the payment to the other service as a POST request
     payload, err := json.Marshal(newPayment)
     if err != nil {
+        p.l.Println("Error marshalling payload:", err)
         http.Error(w, err.Error(), http.StatusInternalServerError)
         return
     }
@@ -62,6 +66,7 @@ func (p *Payment) Pay(w http.ResponseWriter, r *http.Request) {
     url := "http://app-dotnet:8080/api/Pay"
     req, err := http.NewRequest("POST", url, bytes.NewBuffer(payload))
     if err != nil {
+        p.l.Println("Error creating request:", err)
         http.Error(w, err.Error(), http.StatusInternalServerError)
         return
     }
@@ -69,20 +74,29 @@ func (p *Payment) Pay(w http.ResponseWriter, r *http.Request) {
 
     client := &http.Client{}
     resp, err := client.Do(req)
-    if err != nil{
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	defer resp.Body.Close()
+    if err != nil {
+        p.l.Println("Error sending POST request:", err)
+        http.Error(w, err.Error(), http.StatusInternalServerError)
+        return
+    }
+    defer resp.Body.Close()
 
-	if resp.StatusCode == http.StatusOK {
-		p.l.Printf("Payment added successfully")
-		w.WriteHeader(http.StatusOK)
-	} else {
-		http.Error(w, "Payment not added", resp.StatusCode)
-		return
-	}
+    // Read the response body
+    responseBytes, err := io.ReadAll(resp.Body)
+    if err != nil {
+        p.l.Println("Error reading response body:", err)
+        http.Error(w, "Error reading response body", http.StatusInternalServerError)
+        return
+    }
+
+    // Log the response
+    p.l.Printf("Response from the other service: %s\n", responseBytes)
+
+    // Write the response body to the client
+    w.WriteHeader(resp.StatusCode)
+    w.Write(responseBytes)
 }
+
 
 
 

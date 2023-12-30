@@ -1,69 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Products</title>
-    <link rel="stylesheet" href="style.css">
+<title>Product App</title>
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
-        <h1>Product List</h1>
-    </header>
+  <h1>Products</h1>
+  <div id="products"></div>
 
-    <section>
-        <button id="get-products">Get Products</button>
-        <div id="product-list"></div>
+  <button id="getProducts">Get Products</button>
+  <button id="getPayments">Get Payments</button>
 
-        <input type="number" id="pay-amount" placeholder="pay">
-        <button id="pay-btn">Pay</button>
-    </section>
+  <div id="products"></div>
+  <div id="payments"></div>
 
-    <script>
-        const getProductsButton = document.getElementById("get-products");
-        const productList = document.getElementById("product-list");
-        const payButton = document.getElementById("pay-btn");
-        const payAmount = document.getElementById("pay-amount");
+  <h2>Add Product</h2>
+  <form id="addProductForm">
+    <label for="title">Title:</label>
+    <input type="text" id="title" name="title">
+    <br>
+    <label for="genre">Genre:</label>
+    <input type="text" id="genre" name="genre">
+    <br>
+    <label for="releaseYear">Release Year:</label>
+    <input type="number" id="releaseYear" name="releaseYear">
+    <br>
+    <button type="submit">Add Product</button>
+  </form>
 
-        getProductsButton.addEventListener("click", async () => {
-            try {
-                const response = await fetch("http://localhost:9090/payment");
-                const products = await response.json();
+  <h2>Payments</h2>
+  <div id="payments"></div>
+  <label for="amount">Amount:</label>
+  <input type="number" id="amount" name="amount">
+  <br>
+  <button id="makePaymentButton">Make Payment</button>
 
-                productList.innerHTML = ""; // Clear previous content
-
-                products.forEach(product => {
-                    const productItem = document.createElement("p");
-                    productItem.textContent = product.name; // Assuming each product has a 'name' property
-                    productList.appendChild(productItem);
-                });
-            } catch (error) {
-                console.error("Error fetching products:", error);
-                // Handle errors gracefully, e.g., display an error message to the user
-            }
-        });
-
-        payButton.addEventListener("click", async () => {
-            try {
-                let amount = payAmount.value;
-
-                //make a post request to the server endpoint to http://localhost:9090/payment with json body amount
-                // add headers for cors and content-type
-
-                const response = await fetch("http://localhost:9090/payment", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Access-Control-Allow-Origin": "*"
-                    },
-                    body: JSON.stringify({ amount })
-                });
-                
-            } catch (error) {
-                console.error("Error fetching products:", error);
-                // Handle errors gracefully, e.g., display an error message to the user
-            }
-        });
-    </script>
+  <script src="script.js"></script>
 </body>
 </html>
