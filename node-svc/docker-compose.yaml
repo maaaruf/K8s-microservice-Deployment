@@ -46,5 +46,5 @@ services:
     depends_on:
       - golang_app
     ports:
-      - "3001:3000"
+      - "8080:80"
 

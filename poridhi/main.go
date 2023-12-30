@@ -10,6 +10,7 @@ import (
 	"context"
 	"poridhi/handlers"
 	gohandlers "github.com/gorilla/handlers"
+	// "github.com/rs/cors"
 )
 
 func main(){
@@ -39,11 +40,20 @@ func main(){
 
 
 	// CORS
+	// ch := gohandlers.CORS(
+	// 	gohandlers.AllowedOrigins([]string{"*"}),
+	// 	gohandlers.AllowedMethods([]string{"*"}),
+	// 	gohandlers.AllowedHeaders([]string{"*"}),
+	// )
 	ch := gohandlers.CORS(
 		gohandlers.AllowedOrigins([]string{"*"}),
-		gohandlers.AllowedMethods([]string{"*"}),
-		gohandlers.AllowedHeaders([]string{"*"}),
+		gohandlers.AllowedMethods([]string{"GET", "HEAD", "POST", "PUT", "OPTIONS"}),
+		gohandlers.AllowedHeaders([]string{"Content-Type"}),
 	)
+	// c := cors.New(cors.Options{
+    //     AllowedOrigins: []string{"*"},
+    //     AllowCredentials: true,
+    // })
 
 	// create a new server
 	s := http.Server{
