@@ -1,0 +1,26 @@
+version: '3.8'
+networks:
+  payment-network:
+    driver: bridge
+
+services:
+  webapi:
+    image: maaaruf/paymentsvc
+    environment:
+      - ConnectionStrings__DefaultConnection=Server=mssql,1433;Database=payment;User Id=sa;Password=Ohert45#;TrustServerCertificate=True;
+    depends_on: 
+      - mssql
+    ports:
+      - "5001:8080"
+    networks:
+      - payment-network
+  
+  mssql:
+    image: mcr.microsoft.com/mssql/server
+    environment:
+      SA_PASSWORD: Ohert45#
+      ACCEPT_EULA: Y
+    ports:
+      - "1455:1433"
+    networks: 
+        - payment-network
