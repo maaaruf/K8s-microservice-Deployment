@@ -48,10 +48,10 @@ services:
       - "1455:1433"
 
   frontend-app:
-    image: react-frontend
+    image: frontend
     depends_on:
       - golang_app
     ports:
-      # - "8080:80"
-      - "3001:3000"
+      - "8080:80"
+      # - "3001:3000"
 
