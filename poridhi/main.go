@@ -12,7 +12,7 @@ import (
 	"os/signal"
 	"poridhi/handlers"
 	"time"
-	// "strconv"
+
 )
 
 var client *redis.Client
@@ -46,17 +46,7 @@ func main() {
 	postRouter.HandleFunc("/payment", pay.Pay)
 	postRouter.Use(middleware)
 
-	// putRouter := sm.Methods(http.MethodPut).Subrouter()
-	// putRouter.HandleFunc("/{id:[0-9]+}", ph.UpdateProducts)
-	// putRouter.Use(ph.MiddlewareValidateProduct)
-
 	// CORS
-
-	// ch := gohandlers.CORS(
-	// 	gohandlers.AllowedOrigins([]string{"*"}),
-	// 	gohandlers.AllowedMethods([]string{"GET", "HEAD", "POST", "PUT", "OPTIONS"}),
-	// 	gohandlers.AllowedHeaders([]string{"*"}),
-	// )
 	ch := gohandlers.CORS(
 		gohandlers.AllowedOrigins([]string{"*"}),
 		gohandlers.AllowedMethods([]string{"GET", "HEAD", "POST", "PUT", "OPTIONS"}),
@@ -103,17 +93,8 @@ func main() {
 func middleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
-		// Add CORS headers
-		//   w.Header().Set("Access-Control-Allow-Origin", "*")
-
 		// Get expected number from header
 		expectedNum := r.Header.Get("X-Expected-Number")
-		// expectedNum, err := strconv.Atoi(r.Header.Get("X-Expected-Number"))
-		// if err != nil {
-		// 	w.WriteHeader(http.StatusBadRequest)
-		// 	w.Write([]byte("Invalid number"))
-		// 	return
-		// }
 		fmt.Println("Expected Number", expectedNum)
 
 		// Get actual number from Redis

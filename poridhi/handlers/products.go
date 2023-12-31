@@ -85,17 +85,17 @@ func (p *Products) AddProduct(w http.ResponseWriter, r *http.Request) {
 	defer resp.Body.Close()
 
 	// Read the response body
-    responseBytes, err := io.ReadAll(resp.Body)
-    if err != nil {
-        p.l.Println("Error reading response body:", err)
-        http.Error(w, "Error reading response body", http.StatusInternalServerError)
-        return
-    }
+	responseBytes, err := io.ReadAll(resp.Body)
+	if err != nil {
+		p.l.Println("Error reading response body:", err)
+		http.Error(w, "Error reading response body", http.StatusInternalServerError)
+		return
+	}
 
-    // Log the response
-    p.l.Printf("Response from the other service: %s\n", responseBytes)
+	// Log the response
+	p.l.Printf("Response from the other service: %s\n", responseBytes)
 
-    // Write the response body to the client
-    w.WriteHeader(resp.StatusCode)
-    w.Write(responseBytes)
+	// Write the response body to the client
+	w.WriteHeader(resp.StatusCode)
+	w.Write(responseBytes)
 }
