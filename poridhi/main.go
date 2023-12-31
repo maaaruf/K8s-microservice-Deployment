@@ -9,9 +9,13 @@ import (
 	"time"
 	"context"
 	"poridhi/handlers"
+	"github.com/go-redis/redis"
 	gohandlers "github.com/gorilla/handlers"
-	// "github.com/rs/cors"
+	"fmt"
+	// "strconv"
 )
+
+var client *redis.Client
 
 func main(){
 	l := log.New(os.Stdout, "products-api", log.LstdFlags)
@@ -19,23 +23,32 @@ func main(){
 	ph := handlers.NewProducts(l)
 	pay := handlers.NewPayment(l)
 
-	// create a new serve mux and register the handlers
+	// Create Redis client
+	client = redis.NewClient(&redis.Options{
+		Addr: "redis:6379",
+		Password: "",
+		DB: 0,
+	})
 
+	// Initialize Redis cache
+	client.Set("number", "1670", 0)
+
+	// create a new serve mux and register the handlers
 	sm := mux.NewRouter()
 
 	getRouter := sm.Methods(http.MethodGet).Subrouter()
 	getRouter.HandleFunc("/", ph.GetProducts)
 	getRouter.HandleFunc("/payment", pay.LoadPayments)
+	getRouter.Use(middleware)
 
 	postRouter := sm.Methods(http.MethodPost).Subrouter()
 	postRouter.HandleFunc("/", ph.AddProduct)
 	postRouter.HandleFunc("/payment", pay.Pay)
-	// postRouter.Use(ph.MiddlewareValidateProduct)
+	postRouter.Use(middleware)
 
 	// putRouter := sm.Methods(http.MethodPut).Subrouter()
 	// putRouter.HandleFunc("/{id:[0-9]+}", ph.UpdateProducts)
 	// putRouter.Use(ph.MiddlewareValidateProduct)
-	
 	
 
 
@@ -54,6 +67,9 @@ func main(){
     //     AllowedOrigins: []string{"*"},
     //     AllowCredentials: true,
     // })
+
+	// // Apply middleware
+	// sm.Use(middleware)
 
 	// create a new server
 	s := http.Server{
@@ -91,3 +107,36 @@ func main(){
 
 
 }
+
+// Redis middleware
+func middleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	  
+	  // Add CORS headers
+	  w.Header().Set("Access-Control-Allow-Origin", "*")
+
+	  // Get expected number from header
+	  expectedNum := r.Header.Get("X-Expected-Number")
+	// expectedNum, err := strconv.Atoi(r.Header.Get("X-Expected-Number"))
+	// if err != nil {
+	// 	w.WriteHeader(http.StatusBadRequest)
+	// 	w.Write([]byte("Invalid number"))
+	// 	return
+	// }
+	  fmt.Println("Expected Number",expectedNum)
+  
+	  // Get actual number from Redis
+	  actualNum, err := client.Get("number").Result()
+	  fmt.Println("Actual Number", actualNum)
+  
+	  // Check if numbers match
+	  if err != nil || expectedNum != actualNum {
+		w.WriteHeader(http.StatusForbidden)
+		w.Write([]byte("Numbers do not match"))
+		return 
+	  }
+  
+	  // Call next handler if match
+	  next.ServeHTTP(w, r)
+	})
+  }

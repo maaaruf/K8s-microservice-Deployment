@@ -5,7 +5,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    #image: node-service
     ports:
       - "3000:3000"
     depends_on:
@@ -24,6 +23,12 @@ services:
     depends_on:
       - app-node
       - app-dotnet
+      - redis
+  
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
 
   app-dotnet:
     image: maaaruf/paymentsvc
@@ -41,10 +46,12 @@ services:
       ACCEPT_EULA: Y
     ports:
       - "1455:1433"
+
   frontend-app:
-    image: frontend
+    image: react-frontend
     depends_on:
       - golang_app
     ports:
-      - "8080:80"
+      # - "8080:80"
+      - "3001:3000"
 

@@ -1,0 +1,27 @@
+### GET request to localhost:9090 
+GET http://localhost:9090
+X-Expected-Number: 1670
+
+### GET request to get payment
+GET http://localhost:9090/payment
+X-Expected-Number: 1670
+
+### POST request to add movies
+POST http://localhost:9090
+Content-Type: application/json
+X-Expected-Number: 1670
+
+{
+    "title": "Avatar",
+    "genre": "Sci-fi",
+    "releaseYear": 2012
+}
+
+### POST request to add payment
+POST http://localhost:9090/payment
+Content-Type: application/json
+X-Expected-Number: 1670
+
+{
+    "amount": 10
+}
