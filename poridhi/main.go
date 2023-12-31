@@ -1,23 +1,23 @@
 package main
 
 import (
+	"context"
+	"fmt"
+	"github.com/go-redis/redis"
+	gohandlers "github.com/gorilla/handlers"
+	"github.com/gorilla/mux"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
-	"github.com/gorilla/mux"
-	"time"
-	"context"
 	"poridhi/handlers"
-	"github.com/go-redis/redis"
-	gohandlers "github.com/gorilla/handlers"
-	"fmt"
+	"time"
 	// "strconv"
 )
 
 var client *redis.Client
 
-func main(){
+func main() {
 	l := log.New(os.Stdout, "products-api", log.LstdFlags)
 
 	ph := handlers.NewProducts(l)
@@ -25,9 +25,9 @@ func main(){
 
 	// Create Redis client
 	client = redis.NewClient(&redis.Options{
-		Addr: "redis:6379",
+		Addr:     "redis:6379",
 		Password: "",
-		DB: 0,
+		DB:       0,
 	})
 
 	// Initialize Redis cache
@@ -49,32 +49,24 @@ func main(){
 	// putRouter := sm.Methods(http.MethodPut).Subrouter()
 	// putRouter.HandleFunc("/{id:[0-9]+}", ph.UpdateProducts)
 	// putRouter.Use(ph.MiddlewareValidateProduct)
-	
-
 
 	// CORS
+
 	// ch := gohandlers.CORS(
 	// 	gohandlers.AllowedOrigins([]string{"*"}),
-	// 	gohandlers.AllowedMethods([]string{"*"}),
+	// 	gohandlers.AllowedMethods([]string{"GET", "HEAD", "POST", "PUT", "OPTIONS"}),
 	// 	gohandlers.AllowedHeaders([]string{"*"}),
 	// )
 	ch := gohandlers.CORS(
 		gohandlers.AllowedOrigins([]string{"*"}),
 		gohandlers.AllowedMethods([]string{"GET", "HEAD", "POST", "PUT", "OPTIONS"}),
-		gohandlers.AllowedHeaders([]string{"Content-Type"}),
+		gohandlers.AllowedHeaders([]string{"Content-Type", "X-Expected-Number"}),
 	)
-	// c := cors.New(cors.Options{
-    //     AllowedOrigins: []string{"*"},
-    //     AllowCredentials: true,
-    // })
-
-	// // Apply middleware
-	// sm.Use(middleware)
 
 	// create a new server
 	s := http.Server{
-		Addr:         ":9090",      // configure the bind address
-		Handler:      ch(sm),                // set the default handler
+		Addr:         ":9090",           // configure the bind address
+		Handler:      ch(sm),            // set the default handler
 		ErrorLog:     l,                 // set the logger for the server
 		ReadTimeout:  5 * time.Second,   // max time to read request from the client
 		WriteTimeout: 10 * time.Second,  // max time to write response to the client
@@ -82,11 +74,11 @@ func main(){
 	}
 
 	// start the server
-	go func()  {
+	go func() {
 		l.Println("Starting server on port 9090")
 
 		err := s.ListenAndServe()
-		if err != nil{
+		if err != nil {
 			l.Printf("Error starting server: %s\n", err)
 			os.Exit(1)
 		}
@@ -105,38 +97,37 @@ func main(){
 	ctx, _ := context.WithTimeout(context.Background(), 30*time.Second)
 	s.Shutdown(ctx)
 
-
 }
 
 // Redis middleware
 func middleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-	  
-	  // Add CORS headers
-	  w.Header().Set("Access-Control-Allow-Origin", "*")
 
-	  // Get expected number from header
-	  expectedNum := r.Header.Get("X-Expected-Number")
-	// expectedNum, err := strconv.Atoi(r.Header.Get("X-Expected-Number"))
-	// if err != nil {
-	// 	w.WriteHeader(http.StatusBadRequest)
-	// 	w.Write([]byte("Invalid number"))
-	// 	return
-	// }
-	  fmt.Println("Expected Number",expectedNum)
-  
-	  // Get actual number from Redis
-	  actualNum, err := client.Get("number").Result()
-	  fmt.Println("Actual Number", actualNum)
-  
-	  // Check if numbers match
-	  if err != nil || expectedNum != actualNum {
-		w.WriteHeader(http.StatusForbidden)
-		w.Write([]byte("Numbers do not match"))
-		return 
-	  }
-  
-	  // Call next handler if match
-	  next.ServeHTTP(w, r)
+		// Add CORS headers
+		//   w.Header().Set("Access-Control-Allow-Origin", "*")
+
+		// Get expected number from header
+		expectedNum := r.Header.Get("X-Expected-Number")
+		// expectedNum, err := strconv.Atoi(r.Header.Get("X-Expected-Number"))
+		// if err != nil {
+		// 	w.WriteHeader(http.StatusBadRequest)
+		// 	w.Write([]byte("Invalid number"))
+		// 	return
+		// }
+		fmt.Println("Expected Number", expectedNum)
+
+		// Get actual number from Redis
+		actualNum, err := client.Get("number").Result()
+		fmt.Println("Actual Number", actualNum)
+
+		// Check if numbers match
+		if err != nil || expectedNum != actualNum {
+			w.WriteHeader(http.StatusForbidden)
+			w.Write([]byte("Numbers do not match"))
+			return
+		}
+
+		// Call next handler if match
+		next.ServeHTTP(w, r)
 	})
-  }
+}

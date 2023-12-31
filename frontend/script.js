@@ -4,11 +4,13 @@ const baseURL = "http://localhost:9090"
 // Products
 const getProductsBtn = document.getElementById('getProducts');
 getProductsBtn.addEventListener('click', () => {
-  fetch(baseURL + '/',{
+  fetch(baseURL + '/'
+  ,{
     headers: {
       'X-Expected-Number': '1670',
     }
   })
+  
     .then(res => res.json())
     .then(data => {
       displayProducts(data); 
@@ -34,10 +36,12 @@ function displayProducts(products) {
 // Payments
 const getPaymentsBtn = document.getElementById('getPayments');
 getPaymentsBtn.addEventListener('click', () => {
-  fetch(baseURL + '/payment',{
+  fetch(baseURL + '/payment'
+  ,{
     headers: {
       'X-Expected-Number': '1670',
-    }})
+    }}
+    )
     .then(res => res.json())  
     .then(data => {
       displayPayments(data);
