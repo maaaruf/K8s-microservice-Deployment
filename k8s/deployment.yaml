@@ -37,7 +37,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: mehedi02/fruit-frontend
+        image: mehedi02/my-frontend
         resources:
           limits:
             memory: "128Mi"
@@ -61,12 +61,111 @@ spec:
     spec:
       containers:
       - name: dotnet
-        image: mehedi02/fruit-api
+        image: maaaruf/paymentsvc
         resources:
           limits:
             memory: "128Mi"
             cpu: "500m"
         ports:
-        - containerPort: 5000
+        - containerPort: 8080
 
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node
+spec:
+  selector:
+    matchLabels:
+      app: node
+  template:
+    metadata:
+      labels:
+        app: node
+    spec:
+      containers:
+      - name: node
+        image: mehedi02/app-node
+        env:
+        - name: PORT
+          value: '3000'
+        - name: DB_URL
+          value: 'mongodb://mongo:27017/movie_db'
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 3000
 
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo
+spec:
+  selector:
+    matchLabels:
+      app: mongo
+  template:
+    metadata:
+      labels:
+        app: mongo
+    spec:
+      containers:
+      - name: mongo
+        image: mongo
+        resources: {}
+          # limits:
+          #   memory: "128Mi"
+          #   cpu: "500m"
+        ports:
+        - containerPort: 27017
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis
+spec:
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+      - name: redis
+        image: redis
+        resources: {}
+          # limits:
+          #   memory: "128Mi"
+          #   cpu: "500m"
+        ports:
+        - containerPort: 6379
+---
+# mssql deployment with environment variables
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mssql
+spec:
+  selector:
+    matchLabels:
+      app: mssql
+  template:
+    metadata:
+      labels:
+        app: mssql
+    spec:
+      containers:
+      - name: mssql
+        image: mcr.microsoft.com/mssql/server
+        env:
+        - name: SA_PASSWORD
+          value: Ohert45#
+        - name: ACCEPT_EULA
+          value: 'Y'
+        ports:
+        - containerPort: 1433
