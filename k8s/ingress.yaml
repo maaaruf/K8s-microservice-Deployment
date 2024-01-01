@@ -5,7 +5,8 @@ metadata:
   name: nginx
   annotations:
     ingress.kubernetes.io/ssl-redirect: "false"
-spec:
+spec: # there is no ingressClassName because k3d deploy traefik, if you use nginx ingress uncomment below line
+  # ingressClassName: nginx
   rules:
   - http:
       paths:
@@ -16,3 +17,10 @@ spec:
             name: frontend
             port:
               number: 80
+      - path: /api
+        pathType: Prefix
+        backend:
+          service:
+            name: golang
+            port:
+              number: 9090

@@ -25,12 +25,59 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: dotnet
+  name: app-dotnet
 spec:
   selector:
     app: dotnet
   ports:
-  - port: 5000
-    targetPort: 5000
+  - port: 8080
+    targetPort: 8080
 
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-node
+spec:
+  selector:
+    app: node
+  ports:
+  - port: 3000
+    targetPort: 3000
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo
+spec:
+  selector:
+    app: mongo
+  ports:
+  - port: 27017
+    targetPort: 27017
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis
+spec:
+  selector:
+    app: redis
+  ports:
+  - port: 6379
+    targetPort: 6379
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mssql
+spec:
+  selector:
+    app: mssql
+  ports:
+  - port: 1433
+    targetPort: 1433
 

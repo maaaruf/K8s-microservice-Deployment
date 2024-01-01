@@ -37,13 +37,13 @@ func main() {
 	sm := mux.NewRouter()
 
 	getRouter := sm.Methods(http.MethodGet).Subrouter()
-	getRouter.HandleFunc("/", ph.GetProducts)
-	getRouter.HandleFunc("/payment", pay.LoadPayments)
+	getRouter.HandleFunc("/api/products", ph.GetProducts)
+	getRouter.HandleFunc("/api/payment", pay.LoadPayments)
 	getRouter.Use(middleware)
 
 	postRouter := sm.Methods(http.MethodPost).Subrouter()
-	postRouter.HandleFunc("/", ph.AddProduct)
-	postRouter.HandleFunc("/payment", pay.Pay)
+	postRouter.HandleFunc("/api/products", ph.AddProduct)
+	postRouter.HandleFunc("/api/payment", pay.Pay)
 	postRouter.Use(middleware)
 
 	// CORS

@@ -1,10 +1,10 @@
 // Fetch and display products
-const baseURL = "http://localhost:9090"
+const baseURL = "http://localhost"
 
 // Products
 const getProductsBtn = document.getElementById('getProducts');
 getProductsBtn.addEventListener('click', () => {
-  fetch(baseURL + '/'
+  fetch(baseURL + '/api/products'
   ,{
     headers: {
       'X-Expected-Number': '1670',
@@ -36,7 +36,7 @@ function displayProducts(products) {
 // Payments
 const getPaymentsBtn = document.getElementById('getPayments');
 getPaymentsBtn.addEventListener('click', () => {
-  fetch(baseURL + '/payment'
+  fetch(baseURL + '/api/payment'
   ,{
     headers: {
       'X-Expected-Number': '1670',
@@ -76,7 +76,7 @@ addProductForm.addEventListener('submit', (event) => {
     ReleaseYear: releaseYear
   };
 
-  fetch(baseURL + '/', {
+  fetch(baseURL + '/api/products', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -92,7 +92,7 @@ addProductForm.addEventListener('submit', (event) => {
 });
 
 // Fetch and display payments
-fetch(baseURL + '/payment')
+fetch(baseURL + '/api/payment')
   .then(response => response.json())
   .then(payments => {
     const paymentsList = document.getElementById('payments');
@@ -116,7 +116,7 @@ makePaymentButton.addEventListener('click', (event) => {
     Amount: amount
   };
 
-  fetch(baseURL + '/payment', {
+  fetch(baseURL + '/api/payment', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
