@@ -54,6 +54,7 @@ spec:
   selector:
     matchLabels:
       app: dotnet
+  replicas: 1
   template:
     metadata:
       labels:
@@ -62,12 +63,11 @@ spec:
       containers:
       - name: dotnet
         image: maaaruf/paymentsvc
-        resources:
-          limits:
-            memory: "128Mi"
-            cpu: "500m"
         ports:
         - containerPort: 8080
+        env:
+        - name: ConnectionStrings__DefaultConnection
+          value: "Server=mssql,1433;Database=payment;User Id=sa;Password=Ohert45#;TrustServerCertificate=True;"
 
 ---
 apiVersion: apps/v1

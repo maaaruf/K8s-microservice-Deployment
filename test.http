@@ -25,3 +25,11 @@ X-Expected-Number: 1670
 {
     "amount": 10
 }
+
+### k8s GET request
+GET http://localhost/api/products
+X-Expected-Number: 1670
+
+### k8s GET request
+GET http://localhost/api/payment
+X-Expected-Number: 1670
