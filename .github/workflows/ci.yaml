@@ -12,4 +12,8 @@ jobs:
           sudo apt install -y make
           docker version
 
-      - run: make all
+      - name: Build and push Docker image
+        run: make all
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
