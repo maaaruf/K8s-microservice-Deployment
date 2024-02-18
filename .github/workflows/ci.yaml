@@ -13,9 +13,12 @@ jobs:
           sudo apt update
           sudo apt install -y make
 
-      - name: Build and push Docker image
-        run: make all
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-          TAG: ${GITHUB_RUN_ID}
+      # - name: Build and push Docker image
+      #   run: make all
+      #   env:
+      #     DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      #     DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      #     TAG: ${GITHUB_RUN_ID}
+
+      - name: print working directory
+        run: pwd
