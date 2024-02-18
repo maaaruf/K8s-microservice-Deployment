@@ -1,9 +1,9 @@
 tf_init:
 	@echo "Initializing terraform...."
-	@cd "${PWD}/env/dev"
-	@ls "${PWD}/env/dev"
-	@terraform fmt -recursive
-	@terraform init
+	# @cd "${PWD}/env/dev"
+	# @ls "${PWD}/env/dev"
+	@terraform -chdir="env/dev" fmt -recursive
+	@terraform -chdir="env/dev" init
 
 tf_plan:
 	@ echo "Planning terraform..."
