@@ -34,10 +34,10 @@ jobs:
           terraform init
         working-directory: ./terraform
 
-      # - name: Terraform Plan
-      #   # working-directory: ./terraform
-      #   run: |
-      #     cd terraform
-      #     make tf_plan
+      - name: Terraform Plan
+        working-directory: ./terraform
+        run: |
+          cd env/dev
+          terraform plan
 
     
