@@ -1,9 +1,9 @@
 tf_init:
 	@ echo "Initializing terraform...."
-	@ cd env/dev
-	@ ls
-	@ terraform fmt -recursive
-	@ terraform init
+	cd env/dev
+	ls
+	terraform fmt -recursive
+	terraform init
 
 tf_plan:
 	@ echo "Planning terraform..."
