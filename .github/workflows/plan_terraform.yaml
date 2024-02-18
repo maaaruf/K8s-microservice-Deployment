@@ -1,0 +1,43 @@
+name: Plan Terraform
+on:
+  workflow_dispatch:
+defaults:
+  run:
+    working-directory: ./terraform
+
+env:
+  # TF_CLOUD_ORGANIZATION: "terraform-mehedi"
+  TF_API_TOKEN: "${{ secrets.TF_API_TOKEN }}"
+  # TF_WORKSPACE: "github_actions"
+  # CONFIG_DIRECTORY: "./terraform"
+
+
+jobs:
+  terraform:
+    name: Plan Terraform
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        # with:
+        #   ref: ${{ env.BRANCH_NAME }}
+
+      - shell: bash
+        run: |
+          sudo apt update
+          sudo apt install -y make
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        # with:
+        #  terraform_version: 1.1.0
+     
+      - name: Terraform Initialize
+        # working-directory: ./terraform
+        run: make tf_init
+     
+      - name: Terraform Plan
+        # working-directory: ./terraform
+        run: make tf_plan
+
+    
