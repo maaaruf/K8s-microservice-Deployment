@@ -34,12 +34,14 @@ jobs:
      
       - name: Terraform Initialize
         # working-directory: ./terraform
-        run: make tf_init
+        run: 
+          cd terraform
+          make tf_init
      
-      - name: Terraform Plan
-        # working-directory: ./terraform
-        run: |
-          ls
-          # make tf_plan
+      # - name: Terraform Plan
+      #   # working-directory: ./terraform
+      #   run: |
+      #     cd terraform
+      #     make tf_plan
 
     
