@@ -34,7 +34,6 @@ jobs:
      
       - name: Terraform Initialize
         run: |
-          cd env/dev
           make tf_init
         working-directory: ./terraform
       # - name: Terraform Plan
