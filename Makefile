@@ -1,6 +1,8 @@
 IMAGE_NAME ?= mehedi02/poridhi  # Default image name if not specified
 TAG ?= v1
 
+.PHONY: all
+
 all: docker-build-go docker-build-node docker-build-dotnet docker-build-client
 
 docker-build-go:
