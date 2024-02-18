@@ -1,9 +1,9 @@
 name: Plan Terraform
 on:
   workflow_dispatch:
-defaults:
-  run:
-    working-directory: ./terraform
+# defaults:
+#   run:
+#     working-directory: ./terraform
 
 env:
   # TF_CLOUD_ORGANIZATION: "terraform-mehedi"
@@ -33,9 +33,9 @@ jobs:
         #  terraform_version: 1.1.0
      
       - name: Terraform Initialize
-        # working-directory: ./terraform
+        working-directory: terraform
         run: |
-          cd terraform
+          pwd
           make tf_init
      
       # - name: Terraform Plan
