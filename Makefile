@@ -13,7 +13,7 @@ docker-build-node:
 	@ docker image build -t ${IMAGE_NAME}-node:${TAG} ./node-svc
 
 docker-build-dotnet:
-	@ docker image build -t ${IMAGE_NAME}-dotnet:${TAG} ./dotnet-svc/PaymentService
+	@ docker image build -t ${IMAGE_NAME}-dotnet:${TAG} ./dotnet-svc
 
 docker-build-client:
 	@ docker image build -t ${IMAGE_NAME}-client:${TAG} ./frontend
