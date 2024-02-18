@@ -1,5 +1,5 @@
 module "network" {
-  source   = "./modules/network"
+  source   = "../modules/network"
   vpc_cidr = var.vpc_cidr
   vpc_name = var.vpc_name
   subnet_configs = [
@@ -31,7 +31,7 @@ module "network" {
 
 
 module "ec2" {
-  source                = "./modules/ec2"
+  source                = "../modules/ec2"
   public_subnet_id      = module.network.public_subnet_id
   private_subnet_id     = module.network.private_subnet_id
   security_group_id     = module.network.security_group_id
