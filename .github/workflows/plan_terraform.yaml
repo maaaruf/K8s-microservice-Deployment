@@ -22,10 +22,6 @@ jobs:
         # with:
         #   ref: ${{ env.BRANCH_NAME }}
 
-      - shell: bash
-        run: |
-          sudo apt update
-          sudo apt install -y make
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
@@ -34,7 +30,8 @@ jobs:
      
       - name: Terraform Initialize
         run: |
-          make tf_init
+          cd env/dev
+          terraform init
         working-directory: ./terraform
       # - name: Terraform Plan
       #   # working-directory: ./terraform
