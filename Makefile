@@ -6,7 +6,8 @@ TAG ?= v1
 all: docker-build-go docker-build-node docker-build-dotnet docker-build-client
 
 docker-build-go:
-	@ docker image build -t $(IMAGE_NAME)-go:$(TAG) -f go-svc/Dockerfile .
+	
+	@ docker image build -t $(IMAGE_NAME)-go:$(TAG) ./go-svc
 
 docker-build-node:
 	@ docker image build -t ${IMAGE_NAME}-node:${TAG} ./node-svc

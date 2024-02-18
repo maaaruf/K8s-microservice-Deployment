@@ -12,4 +12,4 @@ jobs:
           sudo apt install -y make
           docker version
 
-      - run: make docker-build-go
+      - run: make all
