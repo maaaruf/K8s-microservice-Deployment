@@ -1,5 +1,5 @@
 IMAGE_NAME ?= mehedi02/poridhi  # Default image name if not specified
-TAG ?= latest
+TAG ?= v1
 
 all: docker-build-go docker-build-node docker-build-dotnet docker-build-client
 
