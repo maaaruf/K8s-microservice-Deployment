@@ -33,11 +33,10 @@ jobs:
         #  terraform_version: 1.1.0
      
       - name: Terraform Initialize
-        working-directory: terraform
         run: |
           pwd
           make tf_init
-     
+        working-directory: ./terraform
       # - name: Terraform Plan
       #   # working-directory: ./terraform
       #   run: |
