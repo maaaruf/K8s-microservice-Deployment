@@ -34,7 +34,7 @@ jobs:
      
       - name: Terraform Initialize
         # working-directory: ./terraform
-        run: 
+        run: |
           cd terraform
           make tf_init
      
