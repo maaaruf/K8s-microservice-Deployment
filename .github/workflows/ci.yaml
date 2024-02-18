@@ -11,4 +11,4 @@ jobs:
           sudo apt update
           sudo apt install -y make
 
-      - run: make all
+      - run: make docker-build-go
