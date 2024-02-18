@@ -1,0 +1,12 @@
+name: build-docker-image
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: build-docker-image
+    steps:
+      - uses: actions/checkout@v2
+      - shell: bash
+        run: |
+          sudo apt update && sudo apt upgrade -y
+          sudo apt install -y make
