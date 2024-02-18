@@ -1,6 +1,7 @@
 tf_init:
 	@ echo "Initializing terraform...."
 	@ cd env/dev
+	@ ls
 	@ terraform fmt -recursive
 	@ terraform init
 
