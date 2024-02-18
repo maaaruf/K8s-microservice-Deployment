@@ -10,7 +10,5 @@ jobs:
         run: |
           sudo apt update
           sudo apt install -y make
-      - shell: bash
-        run: |
-          cd go-svc
-          make docker-build IMAGE_NAME="mehedi02/my-golang-service" TAG="latest"
+
+      - run: make all
