@@ -398,3 +398,6 @@ FodyWeavers.xsd
 *.sln.iml
 
 poridhi/go.sum
+
+terraform/env/dev/.terraform
+terraform/env/dev/.terraform.lock.hcl

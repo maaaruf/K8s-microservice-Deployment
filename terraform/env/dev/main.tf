@@ -23,7 +23,7 @@ provider "aws" {
 }
 
 module "dev_infra" {
-  source                = "../../blueprint"
+  source                = "./blueprint"
   vpc_cidr              = "10.10.0.0/16"
   vpc_name              = "dev-vpc"
   public_subnet_name    = "dev-public-subnet"
