@@ -1,6 +1,7 @@
 tf_init:
 	@echo "Initializing terraform...."
 	@cd "${PWD}/env/dev"
+	@ls "${PWD}/env/dev"
 	@terraform fmt -recursive
 	@terraform init
 
