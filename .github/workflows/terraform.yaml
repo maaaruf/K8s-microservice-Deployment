@@ -1,0 +1,56 @@
+name: run Terraform
+on:
+  workflow_dispatch:
+defaults:
+  run:
+    working-directory: ./terraform
+
+env:
+  # TF_CLOUD_ORGANIZATION: "terraform-mehedi"
+  TF_API_TOKEN: "${{ secrets.TF_API_TOKEN }}"
+  # TF_WORKSPACE: "github_actions"
+  # CONFIG_DIRECTORY: "./terraform"
+
+
+jobs:
+  terraform:
+    name: Plan Terraform
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        # with:
+        #   ref: ${{ env.BRANCH_NAME }}
+
+      - shell: bash
+        run: |
+          sudo apt update
+          sudo apt install -y make
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        # with:
+        #  terraform_version: 1.1.0
+     
+      - name: Terraform Initialize
+        working-directory: ./terraform
+        run: make tf_init
+        # run: |
+        #   #terraform init -backend-config=env/backend-${ENV}.hcl -input=false
+        #   terraform init \
+        #   -backend-config=key="saNDBox.terraform.tfstate" \
+        #   -backend-config=storage_account_name="sascrcisrepo" \
+        #   -input=false
+     
+      - name: Terraform Plan
+        working-directory: ./terraform
+        run: make tf_plan
+        # env:
+        #   ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+        #   ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+        # run: terraform plan -var-file env/backend-${ENV}.hcl -var appId="${ARM_CLIENT_ID}" -var password="${ARM_CLIENT_SECRET}" 
+     
+      - name: Apply Terraform
+        working-directory: ./terraform
+        run: make tf_apply
+        # run: terraform apply -auto-approve -var appId="${ARM_CLIENT_ID}" -var password="${ARM_CLIENT_SECRET}" -var-file env/backend-${ENV}.hcl
