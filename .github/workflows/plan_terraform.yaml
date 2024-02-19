@@ -5,11 +5,11 @@ on:
 #   run:
 #     working-directory: ./terraform
 
-env:
-  # TF_CLOUD_ORGANIZATION: "terraform-mehedi"
-  TF_API_TOKEN: "${{ secrets.TF_API_TOKEN }}"
-  # TF_WORKSPACE: "github_actions"
-  # CONFIG_DIRECTORY: "./terraform"
+# env:
+#   # TF_CLOUD_ORGANIZATION: "terraform-mehedi"
+#   TF_API_TOKEN: "${{ secrets.TF_API_TOKEN }}"
+#   # TF_WORKSPACE: "github_actions"
+#   # CONFIG_DIRECTORY: "./terraform"
 
 
 jobs:
@@ -22,11 +22,17 @@ jobs:
         # with:
         #   ref: ${{ env.BRANCH_NAME }}
 
+      - name: Configure AWS Credentials Action For GitHub Actions
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1 
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
-        with:
-          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+        # with:
+        #   cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
      
       - name: Terraform Initialize
         run: |
