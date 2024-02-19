@@ -1,0 +1,21 @@
+name: build-docker-image
+# on: [push]
+on:
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: build-docker-image
+    steps:
+      - uses: actions/checkout@v2
+      - shell: bash
+        run: |
+          sudo apt update
+          sudo apt install -y make
+
+      - name: Build and push Docker image
+        run: make all
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          TAG: ${GITHUB_RUN_ID}
