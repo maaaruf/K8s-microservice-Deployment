@@ -8,15 +8,15 @@ resource "aws_key_pair" "example" {
   public_key = tls_private_key.example.public_key_openssh
 }
 
-resource "local_file" "k3s-key" {
-  content  = tls_private_key.example.private_key_pem
-  filename = "k3s-key.pem"
-}
+# resource "local_file" "k3s-key" {
+#   content  = tls_private_key.example.private_key_pem
+#   filename = "k3s-key.pem"
+# }
 
 resource "aws_s3_object" "object" {
   bucket = "poridhi-briefly-curiously-rightly-greatly-infinite-lion"
   key    = "k3s-key.pem"
-  source = "k3s-key.pem"
+  content = tls_private_key.example.private_key_pem
 
   # The filemd5() function is available in Terraform 0.11.12 and later
   # For Terraform 0.11.11 and earlier, use the md5() function and the file() function:
