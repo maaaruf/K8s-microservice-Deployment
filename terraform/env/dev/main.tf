@@ -1,21 +1,32 @@
-# terraform {
-#   required_providers {
-#     aws = {
-#       source  = "hashicorp/aws"
-#       version = "~> 5.0"
-#     }
-#   }
-# }
-
 terraform {
-  cloud {
-    organization = "terraform-mehedi"
+  backend "s3" {
+    # Replace this with your bucket name!
+    bucket         = "poridhi-briefly-curiously-rightly-greatly-infinite-lion"
+    key            = "terraform.tfstate"
+    region         = "us-east-1"
 
-    workspaces {
-      name = "github_actions"
+    # # Replace this with your DynamoDB table name!
+    # dynamodb_table = "terraform-up-and-running-locks"
+    # encrypt        = true
+  }
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
     }
   }
 }
+
+
+# terraform {
+#   cloud {
+#     organization = "terraform-mehedi"
+
+#     workspaces {
+#       name = "github_actions"
+#     }
+#   }
+# }
 
 # Configure the AWS Provider
 provider "aws" {
