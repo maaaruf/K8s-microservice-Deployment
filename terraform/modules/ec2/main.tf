@@ -17,11 +17,6 @@ resource "aws_s3_object" "object" {
   bucket = "poridhi-briefly-curiously-rightly-greatly-infinite-lion"
   key    = "k3s-key.pem"
   content = tls_private_key.example.private_key_pem
-
-  # The filemd5() function is available in Terraform 0.11.12 and later
-  # For Terraform 0.11.11 and earlier, use the md5() function and the file() function:
-  # etag = "${md5(file("path/to/file"))}"
-  etag = filemd5("k3s-key.pem")
 }
 
 resource "aws_instance" "public" {
@@ -33,7 +28,8 @@ resource "aws_instance" "public" {
   security_groups = [
     var.security_group_id,
   ]
-  depends_on = [aws_key_pair.example, tls_private_key.example, local_file.k3s-key]
+  # depends_on = [aws_key_pair.example, tls_private_key.example, local_file.k3s-key]
+  depends_on = [aws_key_pair.example, tls_private_key.example, aws_s3_object.object]
 }
 
 resource "aws_eip" "public" {
@@ -56,7 +52,8 @@ resource "aws_instance" "private" {
   security_groups = [
     var.security_group_id,
   ]
-  depends_on = [aws_key_pair.example, tls_private_key.example, local_file.k3s-key]
+  # depends_on = [aws_key_pair.example, tls_private_key.example, local_file.k3s-key]
+  depends_on = [aws_key_pair.example, tls_private_key.example, aws_s3_object.object]
 }
 
 ## Provisioning k3s master node
