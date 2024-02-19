@@ -5,7 +5,7 @@ on:
 
 jobs:
   terraform:
-    name: Plan Terraform
+    name: Apply Terraform
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

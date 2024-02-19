@@ -13,6 +13,17 @@ resource "local_file" "k3s-key" {
   filename = "k3s-key.pem"
 }
 
+resource "aws_s3_object" "object" {
+  bucket = "poridhi-briefly-curiously-rightly-greatly-infinite-lion"
+  key    = "k3s-key.pem"
+  source = "k3s-key.pem"
+
+  # The filemd5() function is available in Terraform 0.11.12 and later
+  # For Terraform 0.11.11 and earlier, use the md5() function and the file() function:
+  # etag = "${md5(file("path/to/file"))}"
+  etag = filemd5("k3s-key.pem")
+}
+
 resource "aws_instance" "public" {
   ami           = var.ami
   instance_type = var.instance_type_public
